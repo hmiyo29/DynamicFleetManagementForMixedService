@@ -9,19 +9,24 @@ Topics:
 - instructions.
 
 ## Introduction
-This repository is an assembly of source codes and materials of a model that have been developed as part of a master thesis project conducted by H.Miyoshi. This project aimed to develop a dynamic model that optimises the operations of waterborne vessels which serve passenger mobility and parcels in urban enrironment. As the circumstances of urban transportation has aggravated due to the rapid urbanisation, combining passenger mobility and parcels in urban transportation system has been proposed as an innovative solution to address these issues. 
+This repository assembles source codes and materials of a model developed as part of a master thesis project by H. Miyoshi at Delft University of Technology, MSc Civil Engineering, Traffic and Transport Engineering track. This project aimed to develop a dynamic model that optimises the operations of waterborne vessels that serve passenger mobility and parcels in the urban environment. As the circumstances of urban transportation have aggravated due to rapid urbanisation, combining passenger mobility and parcels in the urban transportation system has been proposed as an innovative solution to address these issues. 
 
-### Contributor
+## Key aspects of this project
+- Development of a mathematical model for the dynamic pickup and delivery problem for heterogeneous services using a rolling horizon approach.
+- Development of an insertion heuristic to solve the routing of vessels at each time step.
+- Evaluation of the insertion heuristic through a series of static experiments between the proposed heuristic and the exact method.
+- Development of a stochastic approach to create individual requests throughout the time horizon.
+- Comparison of transport performance between mixed-purpose and fixed-purpose vessels through KPI analysis under different demand scenarios.
+
+
+## Instruction for the repository
+(Instruction for the repository comes here)
+
+
+## Contributor
 - H.Miyoshi: Author of the report and developer of source codes.
 - Dr. Y.Zhang: Modelling supervision.
 - Dr. S.S.Azadeh: Main Supervisor of the project.
 - Prof. Dr. O.Cats: Supervisor of the project.
 - J.Cheng: Github repository setup.
 - L.Gomes: Github repository setup.
-
-### Project
-This thesis project developed a model which dynamically optimises the operations of waterborne vessels which intend to serve passenger mobility and urban logistic. 
-
-
-## Instruction for the repository
-(Instruction for the repository comes here)
