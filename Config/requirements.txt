@@ -1,0 +1,6 @@
+geopy=2.4.1
+gurobipy=11.0.1
+numpy=1.26.4
+pandas=2.2.1
+plotly=5.20.0
+python=3.12.2
