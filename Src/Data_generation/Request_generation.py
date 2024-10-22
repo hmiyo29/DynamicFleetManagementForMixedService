@@ -28,6 +28,9 @@ if not os.path.exists(folder_data):
 def main(N_inst: int, folder: str, folder_data: str):
     """
     Main function to generate the requests datasets
+    N_inst: number of instances
+    folder: folder to read the data
+    folder_data: folder to save the data
     """
     # vessel purposes possibility
     # 0: passenger, 1: parcel, 2: mixed
@@ -138,8 +141,7 @@ def request_generation(folder: str, folder_data: str, patterns: list, instance: 
         filename = folder_data + f'Requests_K0_{p[0]}_K1_{p[1]}_demand_' + high + f'_instance_{instance}.xlsx'
         # write the requests to an excel file
         write_excel(filename, file_path, dict_requests_all, p)
-
-        print('Requests are created and saved to the excel file')
+        print(f'Pattern {p} is created and saved to the excel file')
 
     return L_requests, L_pass, L_par, L_requests_tt, L_pass_tt, L_par_tt
 
