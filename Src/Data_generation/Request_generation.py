@@ -90,13 +90,12 @@ def main(N_inst: int, folder: str, folder_data: str):
 
 
 #%% Single instance generation
-def request_generation(folder: str, folder_data: str, patterns: list, instance: int , high: str) -> tuple:
+def request_generation(folder: str, folder_data: str, patterns: list, instance: int , demand: str) -> tuple:
     """
     Function to create the requests, single instance
     """
     # parameters for the request generation
-    # file_path = folder + f'Para_K0_{p[0]}_K1_{p[1]}_' + high + '.xlsx'
-    file_path = folder + f'Para_' + high + '.xlsx'
+    file_path = folder + f'Para_' + demand + '.xlsx'
 
     # create the parcel requests
     parcel_requests = Par_requests(file_path)
@@ -105,6 +104,8 @@ def request_generation(folder: str, folder_data: str, patterns: list, instance: 
     # create the passenger requests
     passenger_requests = Pass_requests(file_path)
     passenger_requests.all_process()
+
+    # print(passenger_requests.counter[:, :, 1])
 
     # combine the requests
     dict_requests_all = combine_requests(passenger_requests, parcel_requests)
@@ -136,9 +137,9 @@ def request_generation(folder: str, folder_data: str, patterns: list, instance: 
     
     for p in patterns:
         # define the file path
-        file_path = folder + f'Para_' + high + '.xlsx'
+        file_path = folder + f'Para_' + demand + '.xlsx'
         # define the filename
-        filename = folder_data + f'Requests_K0_{p[0]}_K1_{p[1]}_demand_' + high + f'_instance_{instance}.xlsx'
+        filename = folder_data + f'Requests_K0_{p[0]}_K1_{p[1]}_demand_' + demand + f'_instance_{instance}.xlsx'
         # write the requests to an excel file
         write_excel(filename, file_path, dict_requests_all, p)
         print(f'Pattern {p} is created and saved to the excel file')
