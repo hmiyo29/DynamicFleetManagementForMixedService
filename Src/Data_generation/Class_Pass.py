@@ -44,7 +44,7 @@ class Pass_requests():
         self.all_request_attributes()
         self.build_df()
 
-        return self.dict_requests_tt
+        return self.dict_requests_tt, self.counter
 
     
 
@@ -101,42 +101,42 @@ class Pass_requests():
 
     def request_attributes(self, ori: int, des: int, time_index: int, ind: int, transit_time=45):
             
-            try:
-                requests = self.dict_events_all[(ori, des, time_index)]
-                r_num = requests[0]
-                r_times = requests[1]
-                inter_arrival_times = requests[2]
-                r_sizes = requests[3]
+        try:
+            requests = self.dict_events_all[(ori, des, time_index)]
+            r_num = requests[0]
+            r_times = requests[1]
+            inter_arrival_times = requests[2]
+            r_sizes = requests[3]
 
 
-                # get one of the request
-                r = r_times[ind]
-                # get the size of the request
-                r_size = r_sizes[ind]
-                # get the origin and destination of the request
-                r_ori = self.terminals["N"][ori]
-                r_des = self.terminals["N"][des]
-                # get the pickup time of the request
-                r_pickup = r_times[ind]
-                # get the delivery time of the request
-                r_time_del = r_pickup + transit_time
-                # type of the request
-                r_type = 1
-                # get the size of the request
-                r_size = r_sizes[ind]
-                # get the max transit time of the request
-                r_max_transit_time = transit_time
+            # get one of the request
+            r = r_times[ind]
+            # get the size of the request
+            r_size = r_sizes[ind]
+            # get the origin and destination of the request
+            r_ori = self.terminals["N"][ori]
+            r_des = self.terminals["N"][des]
+            # get the pickup time of the request
+            r_pickup = r_times[ind]
+            # get the delivery time of the request
+            r_time_del = r_pickup + transit_time
+            # type of the request
+            r_type = 1
+            # get the size of the request
+            r_size = r_sizes[ind]
+            # get the max transit time of the request
+            r_max_transit_time = transit_time
 
-                # create a series of the request
-                request_attributes = pd.Series([r_ori, r_des, r_pickup, r_time_del, r_size, r_type, r_max_transit_time], index=['p', 'd', 'a', 'b', 'qr', 's', 'gamma'])
-                
-                
-                return request_attributes
+            # create a series of the request
+            request_attributes = pd.Series([r_ori, r_des, r_pickup, r_time_del, r_size, r_type, r_max_transit_time], index=['p', 'd', 'a', 'b', 'qr', 's', 'gamma'])
             
-            except IndexError:
-                print(f"IndexError: OD pair ({ori}, {des}) at time index {time_index} does not have request with index {ind}")
+            
+            return request_attributes
+        
+        except IndexError:
+            print(f"IndexError: OD pair ({ori}, {des}) at time index {time_index} does not have request with index {ind}")
 
-                return None
+            return None
 
 
 
@@ -149,7 +149,6 @@ class Pass_requests():
             self.counter = np.zeros((self.n_t, self.n_t, len(self.interval)))
 
             for t in range(len(self.interval)):
-
                 for i in range(self.n_t):
                     for j in range(self.n_t):
                         if i != j:
