@@ -445,8 +445,8 @@ def insertion(time_steps, tt, data, terminals, terminals_1, vessels, key_R_serve
     end_insertion = time.time()
     duration = end_insertion - start_insertion
     
-    print("Insertion done")
-    print(f"Solving time: {round(duration, 4)} seconds")
+    # print("Insertion done")
+    # print(f"Solving time: {round(duration, 4)} seconds")
 
 #%% Update the status of requests and dict_r_k
 
@@ -1170,7 +1170,7 @@ def get_service_time(R, coeff_p=0.25, coeff_f=0.5) -> pd.DataFrame:
     n = len(R)
 
     # add a new column "st"
-    R['st'] = 0
+    R['st'] = float(0)
 
     # fill the list
     for r in range(n):
