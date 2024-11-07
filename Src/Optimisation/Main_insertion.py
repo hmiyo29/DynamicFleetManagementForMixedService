@@ -118,8 +118,8 @@ def main(data_path, output_folder, scenario, instance, pattern):
         depot_index = terminals_1.index(depot)
         depots_loc.append(depot_index)
 
-    speed = 11.192   # km/h
-    B = 190    # battery capacity
+    speed = 11.192   # km/h - hard coded
+    B = 190    # battery capacity [kWh]
     revisit = 1    # how many times each node can be visited - doesn't matter in the insertion algorithm
     charge_loc = [4, 6]    # same as the initial depots
     # number of terminals
@@ -169,20 +169,23 @@ def main(data_path, output_folder, scenario, instance, pattern):
     col_k = [f"Travel_distance_k{k}" for k in range(n_k)] + [f"Empty_distance_k{k}" for k in range(n_k)] + [f"loading_pass_{k}" for k in range(n_k)] + [f"loading_parcel_{k}" for k in range(n_k)]
     cols = ["Time", "Total_dist", "Total_empty_dist"] + col_k + ["obj", "Met_Ratio", "N_requests", "Duration"]
     df_distance = pd.DataFrame(columns=cols)
+
+    print("Start the optimisation")
     # %% Run the optimisation
 
     for tt in TT:
         if tt in time_steps:
-            print(f"Time step {tt}")
+            # print(f"Time step {tt}")
+            print("Progress: ", str(round(tt/960*100, 2)), "%", end="\r")
 
             # run the insertion algorithm
             sequences, routes, obj, dict_R, dict_R_assigned, dict_R_unassigned, dict_R_serving, dict_r_k, key_R_served, key_R_failed, depots_temp, depots_temp_all, depots_loc, distances, empty_distances, b_temp, duration, unassigned_pool, assigned_pool, serving_pool = insertion.insertion(time_steps, tt, data, terminals, terminals_1, vessels, key_R_served, key_R_failed, dict_R, dict_R_assigned, dict_R_unassigned, dict_R_serving, unassigned_pool, assigned_pool, serving_pool, dict_r_k, routes, depots_temp, depots_temp_all, depots_loc, charge_loc, revisit, distances, empty_distances, b_temp, n_k, node_list, B, speed)
             
-            print("New sequences and routes")
-            print(sequences)
+            # print("New sequences and routes")
+            # print(sequences)
             # print(routes)
-            print("New objective value")
-            print(obj)
+            # print("New objective value")
+            # print(obj)
 
             try:
                 met_ratio = len(key_R_served) / (len(key_R_served) + len(key_R_failed))
@@ -255,8 +258,6 @@ def ini_step(instance, data, tt=0):
 
     # get the distance matrix
     distance_matrix = get_distance_matrix(terminals)
-    # duplicate the distance matrix for multiple times visits
-    # initial value 10000
 
     # tile the distance matrix for multiple visits - max 5 times
     distmat_all = np.tile(distance_matrix, (revisit, revisit))
@@ -317,8 +318,8 @@ def ini_step(instance, data, tt=0):
             # print("\t", f"Request {R_unassigned.at[r_1, 'key']} is not feasible to be served at time step {tt}")
 
         else:
-            print("\t", f"Request {R_unassigned.at[r_1, 'key']} is feasible to be served at time step {tt}")
-    
+            # print("\t", f"Request {R_unassigned.at[r_1, 'key']} is feasible to be served at time step {tt}")
+            pass
     R_unassigned = R_unassigned_feas.copy()
 
 
@@ -417,7 +418,8 @@ def ini_step(instance, data, tt=0):
                     pass
                 
             except IndexError:
-                print("\t", f"No route found for request {key} by vessel {k}")
+                # print("\t", f"No route found for request {key} by vessel {k}")
+                pass
             
     R_serving = pd.DataFrame([dict_R[i] for i in key_R_serving])
     dict_R_serving = {i: dict_R[i] for i in key_R_serving}
