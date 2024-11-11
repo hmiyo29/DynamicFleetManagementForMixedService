@@ -254,7 +254,6 @@ def insertion(time_steps, tt, data, terminals, terminals_1, vessels, key_R_serve
                     # get the sequence of the vessel
                     sequences[k] = seq_from_route(route_updated[k])
 
-                    # print("Complete middle trip update")
 
 
                 # vessel is dwelling at the terminal
