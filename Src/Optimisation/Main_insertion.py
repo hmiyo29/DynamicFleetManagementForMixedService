@@ -58,6 +58,33 @@ def main(data_path, output_folder, scenario, instance, pattern):
     global depots
     global terminals_1
     global terminals_values
+    global speed
+    global B
+    global revisit
+    global n_t
+    global n_k
+    global charge_loc
+    global distances
+    global empty_distances
+    global depots_loc
+    global key_R_served
+    global key_R_serving
+    global key_R_failed
+    global dict_R
+    global dict_R_assigned
+    global dict_R_unassigned
+    global dict_R_serving
+    global dict_r_k
+    global assigned_pool
+    global unassigned_pool
+    global serving_pool
+    global distance_matrix
+    global routes
+    global depots_loc
+    global r_od_index
+    global node_list
+    global depots_temp
+    global depots_temp_all
 
     # 
     # read excel
@@ -85,32 +112,6 @@ def main(data_path, output_folder, scenario, instance, pattern):
     # add a dummy terminal
     terminals_1.append((0, 0))
 
-    global speed
-    global B
-    global revisit
-    global n_t
-    global n_k
-    global charge_loc
-    global distances
-    global empty_distances
-    global depots_loc
-    global key_R_served
-    global key_R_serving
-    global key_R_failed
-    global dict_R
-    global dict_R_assigned
-    global dict_R_unassigned
-    global dict_R_serving
-    global dict_r_k
-    global assigned_pool
-    global unassigned_pool
-    global serving_pool
-    global distance_matrix
-    global routes
-    global depots_loc
-    global r_od_index
-    global node_list
-
     depots_loc = []
     for i in range(len(depots)):
         depot = eval(depots['o'].values[i])
@@ -133,8 +134,7 @@ def main(data_path, output_folder, scenario, instance, pattern):
     distances = [0 for _ in range(n_k)]
     empty_distances = [0 for _ in range(n_k)]
 # ------------------------------------------------------------------ Initialising ------------------------------------------------------------------
-    global depots_temp
-    global depots_temp_all
+
 
     depots_temp, depots_temp_all = insertion.get_depot_dict(terminals_1, n_k, tt=0, loc=None, revisit=revisit)
   
@@ -170,6 +170,8 @@ def main(data_path, output_folder, scenario, instance, pattern):
     cols = ["Time", "Total_dist", "Total_empty_dist"] + col_k + ["obj", "Met_Ratio", "N_requests", "Duration"]
     df_distance = pd.DataFrame(columns=cols)
 
+    fig_dict = {}
+
     print("Start the optimisation")
     # %% Run the optimisation
 
@@ -181,11 +183,112 @@ def main(data_path, output_folder, scenario, instance, pattern):
             # run the insertion algorithm
             sequences, routes, obj, dict_R, dict_R_assigned, dict_R_unassigned, dict_R_serving, dict_r_k, key_R_served, key_R_failed, depots_temp, depots_temp_all, depots_loc, distances, empty_distances, b_temp, duration, unassigned_pool, assigned_pool, serving_pool = insertion.insertion(time_steps, tt, data, terminals, terminals_1, vessels, key_R_served, key_R_failed, dict_R, dict_R_assigned, dict_R_unassigned, dict_R_serving, unassigned_pool, assigned_pool, serving_pool, dict_r_k, routes, depots_temp, depots_temp_all, depots_loc, charge_loc, revisit, distances, empty_distances, b_temp, n_k, node_list, B, speed)
             
-            # print("New sequences and routes")
-            # print(sequences)
-            # print(routes)
-            # print("New objective value")
-            # print(obj)
+
+        # Initialize figure
+            fig = go.Figure()
+
+            # color presets from plotly
+            colors = ["green", "blue", "red", "aquamarine", "azure"]
+
+            # Plot terminals
+            for n, terminal in enumerate(terminals_1[:-1]):
+                if n in depots_loc:
+                    fig.add_trace(go.Scatter(
+                        x=[terminal[1]],
+                        y=[terminal[0]],
+                        mode='markers',
+                        marker=dict(color='red', size=15),
+                        text=f'Depot {n}',
+                        name=f'Depot {n}'
+                    ))
+                else:
+                    fig.add_trace(go.Scatter(
+                        x=[terminal[1]],
+                        y=[terminal[0]],
+                        mode='markers',
+                        marker=dict(color='grey', size=15),
+                        text=f'{n}',
+                        name=f'{n}'
+                    ))
+
+            # Plot edges and vessels
+            for k in range(len(vessels)):
+
+                # get the sequence and route of vessel k
+                seq_k = sequences[k]
+                route_k = routes[k]
+
+                # plot the route of the vessel
+                for i in range(len(seq_k)-1):
+                    i_loc = depots_temp_all[seq_k[i]]
+                    j_loc = depots_temp_all[seq_k[i+1]]
+                    fig.add_trace(go.Scatter(
+                        x=[i_loc[1], j_loc[1]],
+                        y=[i_loc[0], j_loc[0]],
+                        mode='lines+markers',
+                        line=dict(color=colors[k], width=2),
+                        marker=dict(symbol='arrow-bar-up',
+                        angleref='previous',
+                        color=colors[k], 
+                        size=10),
+                        text=f'Vessel {k}',
+                        name=f'Vessel {k}'
+                    ))
+
+                    # plot the current location of the vessel
+                    fig.add_trace(go.Scatter(
+                        x=[i_loc[1]],
+                        y=[i_loc[0]],
+                        mode='markers',
+                        marker=dict(color=colors[k], size=15),
+                        text=f'Vessel {k}',
+                        name=f'Vessel {k}'
+                    ))
+
+                    # plot the time window
+                    # get the row of the route
+                    row = route_k[i]
+                    # departure time
+                    fig.add_trace(go.Scatter(
+                        x=[(depots_temp_all[row[0]][1])],
+                        y=[(depots_temp_all[row[0]][0] - 0.001)],
+                        mode='text',
+                        text=[f'Departure: {round(row[2], 3)}'],
+                        textfont=dict(size=10, color=colors[k]),
+                        showlegend=False
+                    ))
+
+                    # arrival time
+                    fig.add_trace(go.Scatter(
+                        x=[(depots_temp_all[row[1]][1])],
+                        y=[(depots_temp_all[row[1]][0] + 0.001)],
+                        mode='text',
+                        text=[f'Arrival: {round(row[3], 3)}'],
+                        textfont=dict(size=10, color=colors[k]),
+                        showlegend=False
+                    ))
+
+            # add the terminal number in the plot
+            for n, terminal in enumerate(terminals_1[:-1]):
+                fig.add_trace(go.Scatter(
+                    x=[terminal[1]],
+                    y=[terminal[0]],
+                    mode='text',
+                    text=[f'{n}'],
+                    textfont=dict(size=12, color='black'),
+                    showlegend=False
+                ))
+
+            # Update layout
+            fig.update_layout(
+                title=f'Vessel Routes at time={tt}',
+                xaxis=dict(title='Longitude'),
+                yaxis=dict(title='Latitude'),
+            )
+
+            
+            # store the figure in a dictionary
+            fig_dict[tt] = fig         
 
             try:
                 met_ratio = len(key_R_served) / (len(key_R_served) + len(key_R_failed))
@@ -209,13 +312,17 @@ def main(data_path, output_folder, scenario, instance, pattern):
 
             row = {"Time": tt, "Total_dist": sum(distances), "Total_empty_dist": sum(empty_distances), **{f"Travel_distance_k{k}": distances[k] for k in range(n_k)}, **{f"Empty_distance_k{k}": empty_distances[k] for k in range(n_k)}, **{f"loading_pass_{k}": load_pass[k] for k in range(n_k)}, **{f"loading_parcel_{k}": load_parcel[k] for k in range(n_k)}, "obj": obj, "Met_Ratio": met_ratio,  "N_requests": N_requests, "Duration": duration}
 
-            df_distance = df_distance._append(row, ignore_index=True)
+            # df_distance = df_distance._append(row, ignore_index=True)
+            if df_distance.empty:
+                df_distance = pd.DataFrame.from_records([row])
+            else:
+                df_distance = pd.concat([df_distance, pd.DataFrame.from_records([row])], ignore_index=True)
         
     
     # # write the dataframe to a excel file
     df_distance.to_excel(f"{output_folder}/output_insertion_{scenario}_{pattern}_{instance}.xlsx", index=False)
-    print("Optimisation completed!")
-    return df_distance
+    print("Optimisation completed!", "\n")
+    return df_distance, fig_dict
 
 
 
@@ -431,18 +538,18 @@ def ini_step(instance, data, tt=0):
 
 #%% Other functions
 
-# read excel
-def read_excel(file_path):
+# # read excel
+# def read_excel(file_path):
     
-    # read the whole excel file
-    data = pd.read_excel(file_path, sheet_name=None)
+#     # read the whole excel file
+#     data = pd.read_excel(file_path, sheet_name=None)
     
-    # divide it into different dataframes per sheet
-    terminals = (data['N_fred'])
-    vessels = (data['K'])
-    depots = (data['o'])
+#     # divide it into different dataframes per sheet
+#     terminals = (data['N_fred'])
+#     vessels = (data['K'])
+#     depots = (data['o'])
 
-    return data, terminals, vessels, depots 
+#     return data, terminals, vessels, depots 
 
 
 
