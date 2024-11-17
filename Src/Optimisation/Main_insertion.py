@@ -190,6 +190,8 @@ def main(data_path, output_folder, scenario, instance, pattern):
             # color presets from plotly
             colors = ["green", "blue", "red", "aquamarine", "azure"]
 
+            # print(depots_loc)
+
             # Plot terminals
             for n, terminal in enumerate(terminals_1[:-1]):
                 if n in depots_loc:
@@ -433,7 +435,7 @@ def ini_step(instance, data, tt=0):
     obj, x_sol, y_sol, z_sol, t_sol, t_s_sol, t_e_sol, t_n_sol, t_r_sol, t_rs_sol, t_re_sol, t_rn_sol, b_sol, b_d_sol, b_c_sol, zeta_q_sol, duration, removed_keys = run_inimodel(n_k, n_t, dict_R_assigned={}, dict_R_unassigned=dict_R_unassigned, dict_R_serving={}, dict_r_k={}, dist_mat=distmat_all, depots_loc=depots_loc, charge_loc=depots_loc, vessels=vessels, revisit=revisit, tt=tt, multi=True)
 
 
-    print("Calculation time: ", duration)
+    print("Calculation time: ", round(duration, 3), " seconds")
     
     # from the unassigned pool, find the requests that are assigned to the vessels from the solution y_sol
     for key, value in y_sol.items():
