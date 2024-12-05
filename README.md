@@ -11,9 +11,14 @@ This repository assembles source codes and materials of a model developed as par
 - Development of a stochastic approach to create individual requests throughout the time horizon.
 - Comparison of transport performance between mixed-purpose and fixed-purpose vessels through KPI analysis under different demand scenarios.
 
-## Instruction for the repository
-(Instruction for the repository comes here)
+## Instruction for the repository  
 
+The repository consists of multiple folders. 
+- **Papers:** Contains the full report about this project.
+- **Presentations:** Contains the PowerPoint file which summarises the project.
+- **Src:** Contains the source codes developed in this project and sample notebooks to exhibit the model yourself.
+- **data:** Contains sample parameter data files to create requests in the sample notebook.
+- **Config:** Contains a .txt file listing the necessary packages to run the source codes.
 
 ## Also refer
 - The full report can be found in "Papers" folder or https://repository.tudelft.nl/record/uuid:750990c5-2911-406c-9db9-89904b1520c7 
