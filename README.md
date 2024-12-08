@@ -1,4 +1,4 @@
-# Dynamic Fleet Management of Waterborne Vessels for Mixed Services [![GitHub license](https://badgen.net/github/license/Naereen/Strapdown.js)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+# Dynamic Fleet Management of Waterborne Vessels for Mixed Services 
 ![alt text](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
 
 
