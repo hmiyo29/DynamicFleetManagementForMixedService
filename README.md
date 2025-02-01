@@ -28,5 +28,5 @@ The repository consists of multiple folders.
 - Dr. Y.Zhang: Modelling supervision.
 - Dr. S.S.Azadeh: Main Supervisor of the project.
 - Prof. Dr. O.Cats: Supervisor of the project.
-- J.Cheng: Github repository setup.
-- L.Gomes: Github repository setup.
+- J.Cheng: Github repository setup support.
+- L.Gomes: Github repository setup support.
