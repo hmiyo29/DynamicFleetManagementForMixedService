@@ -21,7 +21,7 @@ The repository consists of multiple folders.
 - **Config:** Contains a .txt file listing the necessary packages to run the source codes.
 
 ## Also refer
-- The full report can be found in "Papers" folder or https://repository.tudelft.nl/record/uuid:750990c5-2911-406c-9db9-89904b1520c7 
+- Miyoshi, H., Zhang, Y., Azadeh, S.S. et al. Dynamic fleet management of waterborne vessels with mixed passenger and parcel services. npj. Sustain. Mobil. Transp. 2, 16 (2025). https://doi.org/10.1038/s44333-025-00035-7
 
 ## Contributor
 - H.Miyoshi: Author of the report and developer of source codes.
